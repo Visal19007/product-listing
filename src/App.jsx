@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import './App.css'
-import { Card, Col, Input, Row, Select, Space } from 'antd';
+import { Button, Card, Col, Input, Row, Select, Space } from 'antd';
 
 import 'axios'
 import axios from 'axios';
 import Meta from 'antd/es/card/Meta';
+import { useCartStore } from './store/useCartStore';
 function App() {
   const [Product,setProduct]=useState([])
   const [loading,setLoading]=useState(true)
@@ -12,6 +13,10 @@ function App() {
   const [filterCat,setFilterCat]=useState('all');
   const [ProSearch,SetProSearch]=useState("");
 
+  const cart=useCartStore(state=>state.cart)
+  const decreaseQty=useCartStore(state=>state.decreaseQty)
+  const increaseQty=useCartStore(state=>state.increaseQty)
+  const removeFromCart=useCartStore(state=>state.removeCart)
   useEffect(()=>{
     axios.get("https://fakestoreapi.com/products")
     .then(res=>{
@@ -36,6 +41,7 @@ function App() {
     setFilterCat(value);
   }
 
+  const addToCart=useCartStore(state=>state.addtoCart);
 
 
   return (
@@ -59,26 +65,46 @@ function App() {
     :
     (
     <div >
-    <Row  >
-      {filterPro.map((item,index)=>(
-      <Col className=' flex justify-center items-center' key={index} xs={24} sm={12} md={8} lg={6}>
-        <Card
-        
-          hoverable
-          style={{ width: 280 }}
-          cover={<img alt="example" src={item.image} />}
-          >
-          <Meta title={item.title} description={item.description}  />
-         <b>${item.price}</b>
-        </Card>
-      </Col>
-      ))}
-
-    </Row>
+      <Row gutter={[16, 16]}>
+        {filterPro.map(product => (
+          <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
+            <Card
+              hoverable
+              cover={<img alt={product.title} src={product.image} style={{ height: 250, objectFit: 'contain' }} />}
+            >
+              <Meta title={product.title} description={`$${product.price}`} />
+              <Button className='mt-4' onClick={()=>addToCart(product)}>
+                Add to Cart
+              </Button>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </div>
+    
 
     )
     }
+    <div>
+        <div style={{ marginTop: 40 }}>
+          <h2>🛒 Cart</h2>
+          {cart.length === 0 ? (
+            <p>Your cart is empty.</p>
+          ) : (
+            cart.map(item => (
+              <div key={item.id} style={{ marginBottom: 10 }}>
+                <img width={100} src={item.image} alt={item.image} />
+                <strong>{item.title}</strong> - ${item.price} x {item.qty}
+                <div>
+                  <Button onClick={() => decreaseQty(item.id)}>-</Button>
+                  <Button onClick={() => increaseQty(item.id)}>+</Button>
+                  <Button onClick={() => removeFromCart(item.id)}>Remove</Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+    </div>
     </>
   )
 }
