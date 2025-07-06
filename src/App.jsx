@@ -85,7 +85,7 @@ function App() {
 
     )
     }
-    <div>
+    {/* <div>
         <div style={{ marginTop: 40 }}>
           <h2>🛒 Cart</h2>
           {cart.length === 0 ? (
@@ -104,7 +104,7 @@ function App() {
             ))
           )}
         </div>
-    </div>
+    </div> */}
     </>
   )
 }
