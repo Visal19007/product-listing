@@ -85,26 +85,8 @@ function App() {
 
     )
     }
-    <div>
-        <div style={{ marginTop: 40 }}>
-          <h2>🛒 Cart</h2>
-          {cart.length === 0 ? (
-            <p>Your cart is empty.</p>
-          ) : (
-            cart.map(item => (
-              <div key={item.id} style={{ marginBottom: 10 }}>
-                <img width={100} src={item.image} alt={item.image} />
-                <strong>{item.title}</strong> - ${item.price} x {item.qty}
-                <div>
-                  <Button onClick={() => decreaseQty(item.id)}>-</Button>
-                  <Button onClick={() => increaseQty(item.id)}>+</Button>
-                  <Button onClick={() => removeFromCart(item.id)}>Remove</Button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-    </div>
+ 
+ 
     </>
   )
 }
