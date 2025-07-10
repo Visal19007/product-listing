@@ -83,6 +83,7 @@ function App() {
     </div>
     )
     }
+
     <div>
           <div style={{ marginTop: 40 }}>
             <h2>🛒 Cart</h2>
@@ -104,6 +105,7 @@ function App() {
           </div>
       </div>
  
+
     </>
   )
 }
