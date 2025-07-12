@@ -2,6 +2,7 @@ import { create } from "zustand";
 export const useCartStore=create((set,get)=>({
     cart:[],
     // total,
+    
     addtoCart:(product)=>{
         const existing=get().cart.find(item=>item.id===product.id)
         if(existing){
