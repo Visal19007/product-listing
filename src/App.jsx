@@ -89,16 +89,16 @@ function App() {
     </div>
     )
     }
+
     <h2 className='mt-5'>🛒 Cart {totalqty} item{totalqty > 1 ? "s" : ""}</h2>
     {cart?
     
     <List
       dataSource={cart}
       renderItem={item=>(
-      
           <div>
-            
                 <div className='mt-10 flex items-center justify-between ' key={item.id} >
+
                   <img width={100} src={item.image} alt={item.image} />
                   <strong>{item.title}</strong>  ${item.price} x {item.qty}
                   <div className='justify-between'>
@@ -122,6 +122,7 @@ function App() {
 
 
  
+
     </>
   )
 }
