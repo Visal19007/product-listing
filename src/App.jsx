@@ -1,69 +1,19 @@
-import { use, useEffect, useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import { Button, Card, Col, Input, List, Row, Select, Space } from 'antd';
+import HomePage from './Home/HomePage'
+import Checkout from './Checkout/Checkout'
 
-import 'axios'
-import axios from 'axios';
-import Meta from 'antd/es/card/Meta';
-import { useCartStore } from './store/useCartStore';
 function App() {
-  const [Product,setProduct]=useState([])
-  const [loading,setLoading]=useState(true)
-  const { Search } = Input;
-  const [filterCat,setFilterCat]=useState('all');
-  const [ProSearch,SetProSearch]=useState("");
-
-  const cart=useCartStore(state=>state.cart)
-  const decreaseQty=useCartStore(state=>state.decreaseQty)
-  const increaseQty=useCartStore(state=>state.increaseQty)
-  const removeFromCart=useCartStore(state=>state.removeCart)
-  useEffect(()=>{
-    axios.get("https://fakestoreapi.com/products")
-    .then(res=>{
-      console.log(res.data)
-      setProduct(res.data)
-      setLoading(false)
-    }).catch(res=>{
-      console.log(res.error)
-      setLoading(false)
-    })
-  },[])
-  
-
-
-  
-  const filterPro = filterCat === "all" // if select still defaulvalue or eqaul all
-  ? ProSearch.trim() === "" ?Product : Product.filter(product=>product.title.toLowerCase().includes(ProSearch.toLowerCase()))  //true: check if Prosearch = empty just get Product else Product filter by searching
-  : ProSearch.trim() === "" // else: check if Prosearch = empty 
-    ? Product.filter(product => product.category === filterCat) //Product filter by select category
-    : Product.filter(product => // if Prosearch is not equal empty
-        product.category === filterCat && // Product filter by select category
-        product.title.toLowerCase().includes(ProSearch.toLowerCase()) // and search by title also
-      );
-  const handleChange=(value)=>{
-    setFilterCat(value);
-  }
-
-  const addToCart=useCartStore(state=>state.addtoCart);
-  const totalprice=cart.reduce((sum,item)=>sum+item.price*item.qty,0)
-  const totalqty=cart.reduce((sum,item)=>sum+item.qty,0)
   return (
-    <>
-    <div className='mt-10 flex justify-between'>
-      <Search placeholder="input search text"  value={ProSearch} onChange={e=>SetProSearch(e.target.value)} style={{ width: 200 }} />
-      <Select
-      defaultValue="all"
-      style={{ width: 120 }}
-      onChange={handleChange}
-      options={[
-        { value: 'all', label: 'All' },
-        { value: "men's clothing", label: 'Men' },
-        { value:"electronics",label:'Electronics'},
-        { value:"jewelery",label:"jewelery"},
-        { value:"women's clothing",label:"Women"}
-      ]}
-    />
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />}  />
+          <Route path="/checkout" element={<Checkout />} />
+        </Routes>
+      </BrowserRouter>
     </div>
+
       
     {loading?(
       <p>Loading Product...</p>
@@ -124,6 +74,7 @@ function App() {
  
 
     </>
+
   )
 }
 
