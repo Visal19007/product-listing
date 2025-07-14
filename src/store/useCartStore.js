@@ -37,11 +37,13 @@ export const useCartStore=create(persist((set,get)=>({
             )
         })
     },
+t
     clearCart:()=>{
         set({
             cart:[]
         })
     }
+
     }),
     {
         name:'cart-list'
