@@ -5,8 +5,7 @@ import Meta from 'antd/es/card/Meta';
 import { useCartStore } from '../store/useCartStore';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { Route } from 'react-router-dom';
-// import Checkout from './Checkout/Checkout';
+
 function HomePage() {
      const [Product,setProduct]=useState([])
   const [loading,setLoading]=useState(true)

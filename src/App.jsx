@@ -8,6 +8,7 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
+
           <Route path="/" element={<HomePage />}  />
           <Route path="/checkout" element={<Checkout />} />
         </Routes>
@@ -36,6 +37,7 @@ function App() {
           </Col>
         ))}
       </Row>
+
     </div>
     )
     }
