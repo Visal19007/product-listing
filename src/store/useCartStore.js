@@ -1,5 +1,6 @@
 import { create } from "zustand";
-export const useCartStore=create((set,get)=>({
+import { persist } from "zustand/middleware";
+export const useCartStore=create(persist((set,get)=>({
     cart:[],
     // total,
     
@@ -36,5 +37,8 @@ export const useCartStore=create((set,get)=>({
             )
         })
     },
-
-})) 
+    }),
+    {
+        name:'cart-list'
+    },
+)) 
