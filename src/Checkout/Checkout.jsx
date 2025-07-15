@@ -4,24 +4,29 @@ import { Avatar, Button, Divider, List, Skeleton } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Alert from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 function Checkout() {
     const cart=useCartStore(state=>state.cart)
     const clear=useCartStore(state=>state.clearCart)
     const total=cart.reduce((sum,item)=>sum+item.price*item.qty,0)
     const [alert,setAlert]=useState(false)
-
+    const navigate=useNavigate();
     const handlePlaceOrder=()=>{
     setAlert(true)
     clear();//🧹 clears Zustand + localStorage automatically
   
     }
     const handleClose=()=>{
+      
       setAlert(false)
+      navigate('/')
+      
+      
     }
 
   return (
     <div>
-       <Snackbar open={alert} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+       <Snackbar open={alert} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           🎉 Thank you for your order!
         </Alert>
@@ -30,7 +35,7 @@ function Checkout() {
         <div
           id="scrollableDiv"
           style={{
-            height: 300,
+            height: 200,
             overflow: 'auto',
             padding: '0 16px',
             border: '1px solid rgba(140, 140, 140, 0.35)',
@@ -41,7 +46,7 @@ function Checkout() {
           <InfiniteScroll
             dataLength={cart.length}
             // next={cart}
-            hasMore={cart.length < 3}
+            // hasMore={cart.length < 3}
             loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
             endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
             scrollableTarget="scrollableDiv"
