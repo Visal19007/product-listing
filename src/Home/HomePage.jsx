@@ -5,14 +5,16 @@ import Meta from 'antd/es/card/Meta';
 import { useCartStore } from '../store/useCartStore';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { Bounce, toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Alert, Snackbar } from '@mui/material';
 function HomePage() {
      const [Product,setProduct]=useState([])
   const [loading,setLoading]=useState(true)
   const { Search } = Input;
   const [filterCat,setFilterCat]=useState('all');
   const [ProSearch,SetProSearch]=useState("");
-
+ const [alert,setAlert]=useState(false)
   const cart=useCartStore(state=>state.cart)
   const decreaseQty=useCartStore(state=>state.decreaseQty)
   const increaseQty=useCartStore(state=>state.increaseQty)
@@ -43,13 +45,17 @@ function HomePage() {
   const handleChange=(value)=>{
     setFilterCat(value);
   }
-
+    const handleClose=()=>{
+      
+      setAlert(false)
+      
+    }
   const addToCart=useCartStore(state=>state.addtoCart);
   const totalprice=cart.reduce((sum,item)=>sum+item.price*item.qty,0)
   const totalqty=cart.reduce((sum,item)=>sum+item.qty,0)
   return (
     <div>
-        <div className='mt-10 flex justify-between'>
+        <div className='mt-20 flex justify-between'>
       <Search placeholder="input search text"  value={ProSearch} onChange={e=>SetProSearch(e.target.value)} style={{ width: 200 }} />
       <Select
       defaultValue="all"
@@ -79,9 +85,14 @@ function HomePage() {
               cover={<img alt={product.title} src={product.image} style={{ height: 250, objectFit: 'contain' }} />}
             >
               <Meta title={product.title} description={`$${product.price}`} />
-              <Button className='mt-4' onClick={()=>addToCart(product)}>
-                Add to Cart
+              <Button className='mt-4' onClick={()=>{addToCart(product);setAlert(true)}}>
+                Adde to Cart
               </Button>
+       <Snackbar open={alert} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Added to Cart
+        </Alert>
+      </Snackbar>
             </Card>
           </Col>
         ))}
@@ -120,7 +131,7 @@ function HomePage() {
     
     }
      <h1 className='mt-10 p-10'>Total: <b>${totalprice.toFixed(2)}</b> </h1>
-     <div className='flex items-center justify-center p-5'><Button  type='primary'><Link to='/checkout'>Go to Checkout</Link></Button></div>
+     <div className='flex items-center justify-center p-10'><Button  type='primary'><Link to='/checkout'>Go to Checkout</Link></Button></div>
     </div>
   )
 }
