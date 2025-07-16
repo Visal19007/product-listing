@@ -10,7 +10,7 @@ function SuccessPage() {
         sessionStorage.removeItem("ordered")
     },[])
   return (
-    <div>
+    <div className='mt-20'>
       <p>🎉 Thank you for your order!</p>
       <Link to='/'><Button>Back to Home</Button></Link>
     </div>
