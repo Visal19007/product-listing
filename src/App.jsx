@@ -3,16 +3,19 @@ import './App.css'
 import HomePage from './Home/HomePage'
 import Checkout from './Checkout/Checkout'
 import SuccessPage from './Success/SuccessPage'
+import Nav from './Navbar/Nav'
 
 function App() {
   return (
     <div>
       <BrowserRouter>
         <Routes>
-
+          <Route  element={<Nav/>} >
           <Route path="/" element={<HomePage />}  />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/success" element={<SuccessPage/>} />
+          </Route>
+          
         </Routes>
       </BrowserRouter>
     </div>
