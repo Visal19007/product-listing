@@ -1,36 +1,45 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useCartStore } from '../store/useCartStore'
 import { Avatar, Button, Divider, List, Skeleton } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Alert from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 function Checkout() {
     const cart=useCartStore(state=>state.cart)
     const clear=useCartStore(state=>state.clearCart)
     const total=cart.reduce((sum,item)=>sum+item.price*item.qty,0)
     const [alert,setAlert]=useState(false)
     const navigate=useNavigate();
+    const setordered=useCartStore(state=>state.setJustordered);
     const handlePlaceOrder=()=>{
-    setAlert(true)
+      setordered(true)
+      // sessionStorage.setItem("ordered","true") optional
+    // setAlert(true)
+    navigate('/success')
     clear();//🧹 clears Zustand + localStorage automatically
-  
-    }
-    const handleClose=()=>{
+  }
+    const justordered=useCartStore(state=>state.justordered)
+    useEffect(()=>{
       
-      setAlert(false)
-      navigate('/')
+      if(cart.length===0 && !justordered){
+          navigate('/')
+      }
+    },[cart])
+
+    // const handleClose=()=>{
       
-      
-    }
+    //   setAlert(false)
+    //   navigate('/')
+    // }
 
   return (
     <div>
-       <Snackbar open={alert} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+       {/* <Snackbar open={alert} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
           🎉 Thank you for your order!
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
       <p className='text-center mt-5 text-2xl'>Checkout</p>
         <div
           id="scrollableDiv"
@@ -69,7 +78,7 @@ function Checkout() {
         <div className='mt-5 flex justify-between p-3'>
           
             <b>Total: ${total.toFixed(2)}</b> <br />
-            <Button  type='primary' onClick={handlePlaceOrder}>Place Order</Button>
+            <Link to='/success'><Button  type='primary' onClick={handlePlaceOrder}>Place Order</Button></Link>
             
         </div>
     </div>

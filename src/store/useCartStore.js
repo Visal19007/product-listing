@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 export const useCartStore=create(persist((set,get)=>({
     cart:[],
-    // total,
+    justordered:false,
     
     addtoCart:(product)=>{
         const existing=get().cart.find(item=>item.id===product.id)
@@ -43,6 +43,11 @@ export const useCartStore=create(persist((set,get)=>({
             cart:[]
         })
 
+    },
+    setJustordered:(value)=>{
+        set({
+            justordered:value
+        })
     },
 
     }),
