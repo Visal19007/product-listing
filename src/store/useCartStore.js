@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 export const useCartStore=create(persist((set,get)=>({
     cart:[],
     justordered:false,
-    
+    search:'',
     addtoCart:(product)=>{
         const existing=get().cart.find(item=>item.id===product.id)
         if(existing){
@@ -48,6 +48,11 @@ export const useCartStore=create(persist((set,get)=>({
         set({
             justordered:value
         })
+    },
+    searchCart:(text)=>{
+    set({
+        search:text
+    })
     },
 
     }),
