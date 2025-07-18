@@ -19,10 +19,11 @@ function HomePage() {
   const decreaseQty=useCartStore(state=>state.decreaseQty)
   const increaseQty=useCartStore(state=>state.increaseQty)
   const removeFromCart=useCartStore(state=>state.removeCart)
+  const searchCart=useCartStore(state=>state.search)
   useEffect(()=>{
     axios.get("https://fakestoreapi.com/products")
     .then(res=>{
-      console.log(res.data)
+      // console.log(res.data)
       setProduct(res.data)
       setLoading(false)
     }).catch(res=>{
@@ -35,12 +36,12 @@ function HomePage() {
 
   
   const filterPro = filterCat === "all" // if select still defaulvalue or eqaul all
-  ? ProSearch.trim() === "" ?Product : Product.filter(product=>product.title.toLowerCase().includes(ProSearch.toLowerCase()))  //true: check if Prosearch = empty just get Product else Product filter by searching
-  : ProSearch.trim() === "" // else: check if Prosearch = empty 
+  ? searchCart.trim() === "" ?Product : Product.filter(product=>product.title.toLowerCase().includes(searchCart.toLowerCase()))  //true: check if Prosearch = empty just get Product else Product filter by searching
+  : searchCart.trim() === "" // else: check if Prosearch = empty 
     ? Product.filter(product => product.category === filterCat) //Product filter by select category
     : Product.filter(product => // if Prosearch is not equal empty
         product.category === filterCat && // Product filter by select category
-        product.title.toLowerCase().includes(ProSearch.toLowerCase()) // and search by title also
+        product.title.toLowerCase().includes(searchCart.toLowerCase()) // and search by title also
       );
   const handleChange=(value)=>{
     setFilterCat(value);
@@ -55,9 +56,10 @@ function HomePage() {
   const totalqty=cart.reduce((sum,item)=>sum+item.qty,0)
   return (
     <div>
-        <div className='mt-20 flex justify-between'>
-      <Search placeholder="input search text"  value={ProSearch} onChange={e=>SetProSearch(e.target.value)} style={{ width: 200 }} />
+        <div className='mt-30 flex justify-end'>
+      {/* <Search placeholder="input search text"  value={ProSearch} onChange={e=>SetProSearch(e.target.value)} style={{ width: 200 }} /> */}
       <Select
+      
       defaultValue="all"
       style={{ width: 120 }}
       onChange={handleChange}
@@ -77,8 +79,9 @@ function HomePage() {
     :
     (
     <div className='mt-10'>
+      {filterPro.length>0?
       <Row gutter={[16, 16]}>
-        {filterPro.map(product => (
+        {filterPro?.map(product => (
           <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
             <Card
               hoverable
@@ -97,6 +100,7 @@ function HomePage() {
           </Col>
         ))}
       </Row>
+      : <p className='text-center'>empty Product...</p> }
     </div>
     )
     }

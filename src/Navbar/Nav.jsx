@@ -1,13 +1,16 @@
 import { ShoppingCartOutlined } from '@ant-design/icons'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Badge } from 'antd'
+import { Badge, Input } from 'antd'
 import { Outlet } from 'react-router-dom'
 import { useCartStore } from '../store/useCartStore'
+import { useEffect, useState } from 'react'
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'CheckOut', href: '/checkout', current: false },
+  
+    
 //   { name: 'Projects', href: '#', current: false },
 //   { name: 'Calendar', href: '#', current: false },
 ]
@@ -17,7 +20,14 @@ function classNames(...classes) {
 }
 
 export default function Nav() {
+  const { Search } = Input;
     const cart=useCartStore(state=>state.cart);
+    const search=useCartStore(state=>state.searchCart)
+    const searchText=useCartStore(state=>state.search)
+    
+
+    
+    
   return (
     <div>
             <Disclosure as="nav" className="w-full bg-gray-800 top-0 fixed z-1000">
@@ -32,18 +42,12 @@ export default function Nav() {
               <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-open:block" />
             </DisclosureButton>
           </div>
-          <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex shrink-0 items-center">
-              {/* <img
-                alt="Your Company"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              /> */}
-              <h1 className='text-white font-black'>Product Listening</h1>
-            </div>
+          <div  className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
+                  
                   <a
                     key={item.name}
                     href={item.href}
@@ -54,12 +58,22 @@ export default function Nav() {
                     )}
                   >
                     {item.name}
+      
                   </a>
+                  
+              
                 ))}
               </div>
             </div>
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="w-80  justify-around  absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-start'>
+              <div className='hidden sm:ml-6 sm:block'>
+                  <Search   placeholder="input search text" value={searchText} onChange={e=>search(e.target.value)}  style={{ width: 200 }} />
+              </div>
+            </div>
+            
+           
             <button
               type="button"
               className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
@@ -73,7 +87,7 @@ export default function Nav() {
             </button>
 
             {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
+            {/* <Menu as="div" className="relative ml-3">
               <div>
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
@@ -114,7 +128,7 @@ export default function Nav() {
                   </a>
                 </MenuItem>
               </MenuItems>
-            </Menu>
+            </Menu> */}
           </div>
         </div>
       </div>
@@ -133,8 +147,11 @@ export default function Nav() {
               )}
             >
               {item.name}
+              
             </DisclosureButton>
+            
           ))}
+          <div  className='w-full '><Search className='w-100'  placeholder="input search text" onChange={e=>search(e.target.value)}  /></div>
         </div>
       </DisclosurePanel>
       

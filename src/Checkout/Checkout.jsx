@@ -12,11 +12,14 @@ function Checkout() {
     const [alert,setAlert]=useState(false)
     const navigate=useNavigate();
     const setordered=useCartStore(state=>state.setJustordered);
+    const clearSearch=useCartStore(state=>state.searchCart)
     const handlePlaceOrder=()=>{
       setordered(true)
+      clearSearch("")
       // sessionStorage.setItem("ordered","true") optional
     // setAlert(true)
     navigate('/success')
+
     clear();//🧹 clears Zustand + localStorage automatically
   }
     const justordered=useCartStore(state=>state.justordered)
