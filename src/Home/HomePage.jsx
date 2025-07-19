@@ -1,25 +1,25 @@
-import { Button, Card, Col, Input, List, Row, Select, Space } from 'antd';
+import { Button, Card, Col, Input, List, Pagination, Row, Select, Space } from 'antd';
 import 'axios'
 import axios from 'axios';
 import Meta from 'antd/es/card/Meta';
 import { useCartStore } from '../store/useCartStore';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bounce, toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Alert, Snackbar } from '@mui/material';
+import { useFilterStore } from '../store/useFilterStore';
 function HomePage() {
      const [Product,setProduct]=useState([])
   const [loading,setLoading]=useState(true)
-  const { Search } = Input;
-  const [filterCat,setFilterCat]=useState('all');
-  const [ProSearch,SetProSearch]=useState("");
  const [alert,setAlert]=useState(false)
   const cart=useCartStore(state=>state.cart)
   const decreaseQty=useCartStore(state=>state.decreaseQty)
   const increaseQty=useCartStore(state=>state.increaseQty)
   const removeFromCart=useCartStore(state=>state.removeCart)
   const searchCart=useCartStore(state=>state.search)
+  const setCategory=useFilterStore(state=>state.setCategory)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   useEffect(()=>{
     axios.get("https://fakestoreapi.com/products")
     .then(res=>{
@@ -34,23 +34,25 @@ function HomePage() {
   
 
 
-  
-  const filterPro = filterCat === "all" // if select still defaulvalue or eqaul all
+  const category=useFilterStore(state=>state.category)
+  const filterPro = category === "all" // if select still defaulvalue or eqaul all
   ? searchCart.trim() === "" ?Product : Product.filter(product=>product.title.toLowerCase().includes(searchCart.toLowerCase()))  //true: check if Prosearch = empty just get Product else Product filter by searching
   : searchCart.trim() === "" // else: check if Prosearch = empty 
-    ? Product.filter(product => product.category === filterCat) //Product filter by select category
+    ? Product.filter(product => product.category === category) //Product filter by select category
     : Product.filter(product => // if Prosearch is not equal empty
-        product.category === filterCat && // Product filter by select category
+        product.category === category && // Product filter by select category
         product.title.toLowerCase().includes(searchCart.toLowerCase()) // and search by title also
       );
-  const handleChange=(value)=>{
-    setFilterCat(value);
-  }
+      const paginatedProducts = filterPro.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
     const handleClose=()=>{
       
       setAlert(false)
       
     }
+
   const addToCart=useCartStore(state=>state.addtoCart);
   const totalprice=cart.reduce((sum,item)=>sum+item.price*item.qty,0)
   const totalqty=cart.reduce((sum,item)=>sum+item.qty,0)
@@ -62,7 +64,7 @@ function HomePage() {
       
       defaultValue="all"
       style={{ width: 120 }}
-      onChange={handleChange}
+      onChange={setCategory}
       options={[
         { value: 'all', label: 'All' },
         { value: "men's clothing", label: 'Men' },
@@ -81,7 +83,7 @@ function HomePage() {
     <div className='mt-10'>
       {filterPro.length>0?
       <Row gutter={[16, 16]}>
-        {filterPro?.map(product => (
+        {paginatedProducts?.map(product => (
           <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
             <Card
               hoverable
@@ -102,9 +104,22 @@ function HomePage() {
       </Row>
       : <p className='text-center'>empty Product...</p> }
     </div>
+    
     )
     }
+    
+          {/* <Pagination
+            current={currentPage}
+            pageSize={itemsPerPage}
+            total={filterPro.length}
+            onChange={page => setCurrentPage(page)}
+            className="text-center mt-4"
+          /> */}
+          <br />
+           <Pagination align='end' current={currentPage} pageSize={itemsPerPage}  onChange={page=>setCurrentPage(page)} total={filterPro.length} />
+
     <h2 className='mt-5'>🛒 Cart {totalqty} item{totalqty > 1 ? "s" : ""}</h2>
+    
     {cart?
     
     <List
@@ -136,7 +151,9 @@ function HomePage() {
     }
      <h1 className='mt-10 p-10'>Total: <b>${totalprice.toFixed(2)}</b> </h1>
      <div className='flex items-center justify-center p-10'><Button  type='primary'><Link to='/checkout'>Go to Checkout</Link></Button></div>
+
     </div>
+    
   )
 }
 
