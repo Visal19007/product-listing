@@ -1,4 +1,4 @@
-import { Button, Card, Col, Input, List, Pagination, Row, Select, Space } from 'antd';
+import { Button, Card, Col, Input, List, Pagination, Row, Select, Skeleton, Space } from 'antd';
 import 'axios'
 import axios from 'axios';
 import Meta from 'antd/es/card/Meta';
@@ -25,7 +25,10 @@ function HomePage() {
     .then(res=>{
       // console.log(res.data)
       setProduct(res.data)
-      setLoading(false)
+      setTimeout(()=>{
+        setLoading(false)
+      },1000)
+      
     }).catch(res=>{
       console.log(res.error)
       setLoading(false)
@@ -76,7 +79,31 @@ function HomePage() {
     </div>
       
     {loading?(
-      <p>Loading Product...</p>
+      // <p>Loading Product...</p>
+        Array.from({ length: filterPro.length }).map((_, i) => (
+      <Row key={i} gutter={[16, 16]} className='mt-10'>
+        {paginatedProducts?.map(product => (
+          <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
+            <Card>
+            <Skeleton.Button
+              active
+              shape="default"
+              block
+              style={{
+                height: 250,
+                borderRadius: 8,
+              }}
+            />
+              <Skeleton className='mt-3' paragraph={2} active title={false} />
+             
+              <Skeleton.Button style={{height:30,width:100}} active className='mt-2' />
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    
+  ))
+      
     )
     :
     (
