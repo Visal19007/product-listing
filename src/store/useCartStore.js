@@ -2,19 +2,20 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 export const useCartStore=create(persist((set,get)=>({
     cart:[],
+    orderHistory:[],
     justordered:false,
     search:'',
-    addtoCart:(product)=>{
+    addtoCart:(product,qty)=>{
         const existing=get().cart.find(item=>item.id===product.id)
         if(existing){
             set({
                 cart:get().cart.map(item=>
-                    item.id===product.id?{...item,qty:item.qty+1}:item
+                    item.id===product.id?{...item,qty:item.qty+qty}:item
                 )
             })
         }else{
             set({
-                cart:[...get().cart,{...product,qty:1}]
+                cart:[...get().cart,{...product,qty:qty}]
             })
         }
     },
@@ -54,6 +55,11 @@ export const useCartStore=create(persist((set,get)=>({
         search:text
     })
     },
+    OrderHistory:()=>{
+        set({
+            
+        })
+    }
 
     }),
     {
