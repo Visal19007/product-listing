@@ -27,7 +27,7 @@ function HomePage() {
       setProduct(res.data)
       setTimeout(()=>{
         setLoading(false)
-      },1000)
+      },500)
       
     }).catch(res=>{
       console.log(res.error)
@@ -114,7 +114,7 @@ function HomePage() {
           <Col key={product.id} xs={24} sm={12} md={8} lg={6}>
             <Card
               hoverable
-              cover={<img alt={product.title} src={product.image} style={{ height: 250, objectFit: 'contain' }} />}
+              cover={<Link to={`/product/${product.id}`}><img  alt={product.title} src={product.image} style={{width:"100%", height: 250, objectFit: 'contain' }} /></Link>}
             >
               <Meta title={product.title} description={`$${product.price}`} />
               <Button className='mt-4' onClick={()=>{addToCart(product);setAlert(true)}}>
@@ -160,6 +160,7 @@ function HomePage() {
                   <strong>{item.title}</strong>  ${item.price} x {item.qty}
                   <div className='justify-between'>
                     <Button onClick={() => decreaseQty(item.id)}>-</Button>
+                    {}
                     <Button onClick={() => increaseQty(item.id)}>+</Button>
                     
                   </div>
