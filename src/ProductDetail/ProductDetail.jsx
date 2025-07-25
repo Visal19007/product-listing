@@ -53,6 +53,7 @@ function ProductDetail() {
                 <Button className='mt-4' onClick={()=>{addToCart(product,qty);setAlert(true)}}>
                     Adde to Cart
                 </Button>
+                {/* {date} */}
 
                     <Snackbar open={alert} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                         <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
