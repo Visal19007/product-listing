@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Alert from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { useHistoryStore } from '../store/useHistoryStore';
 function Checkout() {
     const cart=useCartStore(state=>state.cart)
     const clear=useCartStore(state=>state.clearCart)
@@ -13,9 +14,17 @@ function Checkout() {
     const navigate=useNavigate();
     const setordered=useCartStore(state=>state.setJustordered);
     const clearSearch=useCartStore(state=>state.searchCart)
+    const setHistory=useHistoryStore(state=>state.SetorderHistory)
+    const date=new Date().toLocaleString()
     const handlePlaceOrder=()=>{
       setordered(true)
+      cart.forEach(product => {
+        setHistory(product, date);
+      });
+
+      
       clearSearch("")
+      
       // sessionStorage.setItem("ordered","true") optional
     // setAlert(true)
     navigate('/success')

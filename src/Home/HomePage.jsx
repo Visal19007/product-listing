@@ -160,7 +160,7 @@ function HomePage() {
                   <strong>{item.title}</strong>  ${item.price} x {item.qty}
                   <div className='justify-between'>
                     <Button onClick={() => decreaseQty(item.id)}>-</Button>
-                    {}
+                    
                     <Button onClick={() => increaseQty(item.id)}>+</Button>
                     
                   </div>

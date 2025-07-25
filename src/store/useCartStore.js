@@ -2,10 +2,11 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 export const useCartStore=create(persist((set,get)=>({
     cart:[],
-    orderHistory:[],
+   
     justordered:false,
     search:'',
-    addtoCart:(product,qty)=>{
+     
+    addtoCart:(product,qty=1)=>{
         const existing=get().cart.find(item=>item.id===product.id)
         if(existing){
             set({
@@ -55,11 +56,7 @@ export const useCartStore=create(persist((set,get)=>({
         search:text
     })
     },
-    OrderHistory:()=>{
-        set({
-            
-        })
-    }
+
 
     }),
     {
