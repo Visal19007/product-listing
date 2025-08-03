@@ -1,16 +1,16 @@
-import { Image, Table } from 'antd';
+import { Button, Image, Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useHistoryStore } from '../store/useHistoryStore';
+import { Link } from 'react-router-dom';
 
 function OrderHistoryPage() {
 const orderHistory=useHistoryStore(state=>state.orderHistory)
+
 const [history,setHistory]=useState([])
 useEffect(()=>{
   setHistory(orderHistory)
 },[])
-const show=()=>{
-  console.log(history)
-}
+
 const columns = [
   {
     title: 'Title',
@@ -39,8 +39,18 @@ const columns = [
     title: 'DateTime',
     dataIndex: 'datetime',
     key: 'datetime',
-    // render:()=>date
   },
+  {
+    title: 'Total',
+    dataIndex: 'total',
+    key: 'total',
+    render:(total)=><span className='text-red-500 font-bold'>${total}</span>
+  },
+  {
+    title: 'Action',
+    render:(order)=> <Link to={`/product/${order.id}`}><Button type='primary' >View Detail</Button></Link>
+
+  }
 ];
 
   return (

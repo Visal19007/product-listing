@@ -4,9 +4,10 @@ import { persist } from 'zustand/middleware'
 export const useHistoryStore = create(persist((set,get) => ({
     orderHistory:[],
     
-      SetorderHistory:(product,date)=>{
+      SetorderHistory:(product)=>{
+         
         set({
-            orderHistory:[...get().orderHistory,{...product,datetime:date}]
+            orderHistory:[...get().orderHistory,{...product,datetime:new Date().toLocaleString(),total:product.price*product.qty}]
         })
     },
   
