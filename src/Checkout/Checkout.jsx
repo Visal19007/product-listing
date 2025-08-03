@@ -19,7 +19,7 @@ function Checkout() {
     const handlePlaceOrder=()=>{
       setordered(true)
       cart.forEach(product => {
-        setHistory(product, date);
+        setHistory(product);
       });
 
       
