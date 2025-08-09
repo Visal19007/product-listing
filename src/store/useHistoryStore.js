@@ -7,6 +7,7 @@ export const useHistoryStore = create(persist((set,get) => ({
       SetorderHistory:(product)=>{
          
         set({
+            
             orderHistory:[...get().orderHistory,{...product,datetime:new Date().toLocaleString(),total:product.price*product.qty}]
         })
     },
