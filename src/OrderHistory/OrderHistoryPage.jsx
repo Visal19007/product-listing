@@ -12,15 +12,30 @@ const total=history.reduce((sum,order)=>sum+order.total,0)
 const orderItems=history.reduce((sum,order)=>sum+order.qty,0)
 const { RangePicker } = DatePicker;
 
+// const handleDateFilter=(dates)=>{
+//   if(!dates || dates.length===0){
+//     setFiltered(orderHistory); // Reset to full list
+//     return;
+//   }
+//   const [start,end]=dates;
+//   const filtered =orderHistory.filter(order=>{
+//     const orderDate=new Date(order.datetime);
+//     return orderDate>=start.toDate() && orderDate<=end.toDate();
+//   })
+//   setFiltered(filtered);
+// }
+const [startDate, setStartDate] = useState(null);
+const [endDate, setEndDate] = useState(null);
 const handleDateFilter=(dates)=>{
-  if(!dates || dates.length===0){
+  if(!dates || !startDate){
     setFiltered(orderHistory); // Reset to full list
     return;
   }
-  const [start,end]=dates;
+  // const [start,end]=dates;
+  setEndDate(dates);
   const filtered =orderHistory.filter(order=>{
     const orderDate=new Date(order.datetime);
-    return orderDate>=start.toDate() && orderDate<=end.toDate();
+    return orderDate>=startDate.toDate() && endDate<=end.toDate();
   })
   setFiltered(filtered);
 }
@@ -75,10 +90,14 @@ const columns = [
     <div className='mt-30 p-5'>
       <div className='flex justify-between items-center mb-5'>
       <b>Order History</b>  
-      <RangePicker onChange={dates=>handleDateFilter(dates)} />
+     <div className='flex gap-2'>
+       {/* <RangePicker onChange={dates=>handleDateFilter(dates)} /> */}
+      <DatePicker onChange={date=>{handleDateFilter(date),setStartDate(date)}} />
+      <DatePicker  onChange={dates=>handleDateFilter(dates)}/>
+     </div>
       
       </div>
-    <Table className='mt-10'  dataSource={filtered} rowKey={'id'}  columns={columns} />
+    <Table className='mt-10' pagination={{pageSize:5}} dataSource={filtered} rowKey={'id'}  columns={columns} />
 
     <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-5">
       <h2 className="text-xl font-bold mb-2">Order Summary</h2>
