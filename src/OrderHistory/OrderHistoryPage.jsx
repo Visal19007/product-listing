@@ -32,10 +32,10 @@ const handleDateFilter=(dates)=>{
     return;
   }
   // const [start,end]=dates;
-  setEndDate(dates);
+  // setEndDate(dates);
   const filtered =orderHistory.filter(order=>{
     const orderDate=new Date(order.datetime);
-    return orderDate>=startDate.toDate() && endDate<=end.toDate();
+    return orderDate>=startDate.toDate() && orderDate<=dates.toDate();
   })
   setFiltered(filtered);
 }
@@ -93,7 +93,7 @@ const columns = [
      <div className='flex gap-2'>
        {/* <RangePicker onChange={dates=>handleDateFilter(dates)} /> */}
       <DatePicker onChange={date=>{handleDateFilter(date),setStartDate(date)}} />
-      <DatePicker  onChange={dates=>handleDateFilter(dates)}/>
+      <DatePicker  onChange={dates=>{handleDateFilter(dates),setEndDate(dates)}}/>
      </div>
       
       </div>
